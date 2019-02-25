@@ -102,37 +102,17 @@
                           <md-menu-item data-ng-show="test.artifactsToShow.length">
                             <md-menu>
                               <md-button name="testArtifacts" aria-label="Test artifacts" class="md-icon-button" ng-click="$mdMenu.open($event);">
-                                <md-icon class="material-icons">attachment</md-icon>
+                                <md-icon class="material-icons">attachment</md-icon><span>attachment</span>
                               </md-button>
-                              <span>attachment</span>
-                              <md-menu-content>
-                                <md-menu-item ng-repeat="artifact in test.artifactsToShow">
-                                  <md-button href="{{artifact.link}}" class="artifact-button" target="blank" name="artifact">{{artifact.name}}</md-button>
-                                </md-menu-item>
-                              </md-menu-content>
-                            </md-menu>
-                          </md-menu-item>
-                          <md-menu-item>
-                            <md-button name="testDetails" aria-label="Test details" class="md-icon-button" ng-click="$ctrl.showDetailsDialog(test, $event);">
-                              <md-icon class="material-icons">bug_report</md-icon>
-                            </md-button>
-                            <span>details</span>
-                          </md-menu-item>
-                          <md-menu-item>
-                            <md-button class="md-icon-button" ng-click="$ctrl.goToTestDetails(test.id);">
-                              <md-icon class="material-icons">remove_red_eye</md-icon>
-                            </md-button>
-                            <span>overview</span>
-                          </md-menu-item>
-                        </md-menu-content>
-                      </md-menu>
-                        <div data-ng-show="test.artifactsToShow.length">
-                            <div class="test-settings__button" ng-repeat="artifact in test.artifactsToShow">
-                                <!--<div ng-switch="artifact.extension">-->
-                                <md-button name="testArtifactsGallery" aria-label="Test artifacts" class="md-icon-button" ng-if="['png'].indexOf(artifact.extension) !== -1">
+                              <md-menu-content class="test-settings__submenu-content">
+                                <md-menu-item data-ng-show="test.artifactsGallery">
+                                  <md-button name="testArtifactsGallery" aria-label="Test artifacts" class="md-icon-button">
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/image.svg" class="material-icons"></md-icon>
-                                </md-button>
-                                <md-button name="testArtifacts" href="{{artifact.link}}" aria-label="Test artifacts" class="md-icon-button" ng-if="['png'].indexOf(artifact.extension) === -1">
+                                    <span>images</span>
+                                  </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-repeat="artifact in test.artifactsToShow" ng-if="['png'].indexOf(artifact.extension) === -1">
+                                  <md-button name="testArtifacts" href="{{artifact.link}}" aria-label="Test artifacts" class="md-icon-button">
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/pdf.svg" ng-if="['pdf'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/apk.svg" ng-if="['apk'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/exe.svg" ng-if="['exe'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
@@ -140,23 +120,75 @@
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/xls.svg" ng-if="['xls', 'xlsx'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/txt.svg" ng-if="['txt'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
                                     <md-icon md-svg-src="assets/images/_icons_artifacts/bin.svg" ng-if="['txt', 'pdf', 'xls', 'xlsx', 'doc', 'docx', 'exe', 'apk'].indexOf(artifact.extension) === -1" class="material-icons"></md-icon>
+                                    <span>{{artifact.name}}</span>
+                                  </md-button>
+                                </md-menu-item>
+                              </md-menu-content>
+                            </md-menu>
+                          </md-menu-item>
+                          <md-menu-item>
+                            <md-button name="testDetails" aria-label="Test details" class="md-icon-button" ng-click="$ctrl.showDetailsDialog(test, $event);">
+                              <md-icon class="material-icons">bug_report</md-icon><span>details</span>
+                            </md-button>
+                          </md-menu-item>
+                          <md-menu-item>
+                            <md-button class="md-icon-button" ng-click="$ctrl.goToTestDetails(test.id);">
+                              <md-icon class="material-icons">remove_red_eye</md-icon><span>overview</span>
+                            </md-button>
+                          </md-menu-item>
+                        </md-menu-content>
+                      </md-menu>
+                        <div ng-if="test.artifactsToShow.length <= 3" >
+                            <div class="test-settings__wrapper">
+                                <md-button name="testArtifactsGallery" aria-label="Test artifacts" class="md-icon-button" ng-if="test.artifactsGallery">
+                                    <md-icon md-svg-src="assets/images/_icons_artifacts/image.svg" class="material-icons"></md-icon>
+                                    <md-tooltip md-direction="right">images</md-tooltip>
                                 </md-button>
+                                <!--<div ng-switch="artifact.extension">-->
+                                <div ng-repeat="artifact in test.artifactsToShow" class="test-settings__button">
+                                  <md-button name="testArtifacts" href="{{artifact.link}}" aria-label="Test artifacts" class="md-icon-button" ng-if="['png'].indexOf(artifact.extension) === -1">
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/pdf.svg" ng-if="['pdf'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/apk.svg" ng-if="['apk'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/exe.svg" ng-if="['exe'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/doc.svg" ng-if="['doc', 'docx'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/xls.svg" ng-if="['xls', 'xlsx'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/txt.svg" ng-if="['txt'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                      <md-icon md-svg-src="assets/images/_icons_artifacts/bin.svg" ng-if="['txt', 'pdf', 'xls', 'xlsx', 'doc', 'docx', 'exe', 'apk'].indexOf(artifact.extension) === -1" class="material-icons"></md-icon>
+                                      <md-tooltip md-direction="right">{{artifact.name}}</md-tooltip>
+                                  </md-button>
+                              </div>
                                 <!--</div>-->
                             </div>
                         </div>
-                        <div ng-show="test.artifactsToShow.length" class="divider"></div>
-                      <!--<div data-ng-show="test.artifactsToShow.length" class="test-settings__button">
-                        <md-menu>
-                          <md-button name="testArtifacts" aria-label="Test artifacts" class="md-icon-button" ng-click="$mdMenu.open($event);">
-                            <md-icon class="material-icons">attachment</md-icon>
-                          </md-button>
-                          <md-menu-content>
-                            <md-menu-item ng-repeat="artifact in test.artifactsToShow">
-                              <md-button href="{{artifact.link}}" class="artifact-button" target="blank" name="artifact">{{artifact.name}}</md-button>
-                            </md-menu-item>
-                          </md-menu-content>
-                        </md-menu>
-                      </div>-->
+                        <div ng-if="test.artifactsToShow.length && test.artifactsToShow.length <= 3" class="divider"></div>
+                        <div ng-if="test.artifactsToShow.length > 3" class="test-settings__button">
+                          <md-menu class="test-settings__menu-desc">
+                            <md-button name="testArtifacts" aria-label="Test artifacts" class="md-icon-button" ng-click="$mdMenu.open($event);">
+                              <md-icon class="material-icons">attachment</md-icon>
+                              <md-tooltip md-direction="right">attachment</md-tooltip>
+                            </md-button>
+                            <md-menu-content class="test-settings__descmenu-content">
+                              <md-menu-item ng-show="test.artifactsGallery">
+                                <md-button name="testArtifactsGallery" aria-label="Test artifacts" class="md-icon-button">
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/image.svg" class="material-icons"></md-icon>
+                                  <span>images</span>
+                                </md-button>
+                              </md-menu-item>
+                              <md-menu-item ng-repeat="artifact in test.artifactsToShow" ng-if="['png'].indexOf(artifact.extension) === -1">
+                                <md-button name="testArtifacts" href="{{artifact.link}}" aria-label="Test artifacts" class="md-icon-button">
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/pdf.svg" ng-if="['pdf'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/apk.svg" ng-if="['apk'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/exe.svg" ng-if="['exe'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/doc.svg" ng-if="['doc', 'docx'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/xls.svg" ng-if="['xls', 'xlsx'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/txt.svg" ng-if="['txt'].indexOf(artifact.extension) !== -1" class="material-icons"></md-icon>
+                                  <md-icon md-svg-src="assets/images/_icons_artifacts/bin.svg" ng-if="['txt', 'pdf', 'xls', 'xlsx', 'doc', 'docx', 'exe', 'apk'].indexOf(artifact.extension) === -1" class="material-icons"></md-icon>
+                                  <span>{{artifact.name}}</span>
+                                </md-button>
+                              </md-menu-item>
+                            </md-menu-content>
+                          </md-menu>
+                      </div>
                       <div class="test-settings__button">
                         <md-button name="testDetails" aria-label="Test details" class="md-icon-button" ng-click="$ctrl.showDetailsDialog(test, $event);">
                           <md-icon class="material-icons">bug_report</md-icon>

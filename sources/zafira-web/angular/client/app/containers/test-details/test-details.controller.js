@@ -205,8 +205,12 @@
 
                 return !name.includes('live') && !name.includes('video');
             });
+            test.artifactsGallery = false;
             test.artifactsToShow.forEach(function (artifact) {
                 artifact.extension = artifact.link.split('.').pop().split('?')[0];
+                if(artifact.extension === 'png') {
+                    test.artifactsGallery = true;
+                }
             });
             test.tags = test.tags.filter(function (tag) {
                 return tag.name !== 'TESTRAIL_TESTCASE_UUID' && tag.name !== 'QTEST_TESTCASE_UUID';

@@ -224,7 +224,6 @@
                 }
                 & .test-label {
                     flex-grow: 1;
-                    text-align: center;
                     @extend %noBorderPadding;
                     @media (max-width: $breakpoint-mobile) {
                         padding-bottom: 5px;
@@ -241,11 +240,20 @@
                         height: 2px;
                         background-color: #c9d6ca;
                         transform: rotate(-90deg);
+                        @media(max-width: $breakpoint-mobile) {
+                            display: none;
+                        }
                     }
                     @media(max-width: $breakpoint-mobile) {
                         flex-grow: 1;
                     }
                     @extend %noBorderPadding;
+                    &__wrapper {
+                        display: flex;
+                        @media(max-width: $breakpoint-mobile) {
+                            display: none;
+                        }
+                    }
                     &__button {
                         @media(max-width: $breakpoint-mobile) {
                             display: none;
@@ -270,16 +278,22 @@
             padding: 0 20px;
         }
     }
-    .test-settings__menu-content {
+    .test-settings__menu-content,
+    .test-settings__submenu-content,
+    .test-settings__descmenu-content {
         md-menu-item, md-menu {
             display: flex;
             align-items: center;
             padding: 0;
             .md-button {
-                min-width: 40px;
-            }
-            span {
-                padding-left: 16px;
+                width: 100%;
+                display: flex;
+                span {
+                    padding-left: 16px;
+                    color: rgba(0,0,0,0.87);
+                    font-weight: normal;
+                    text-transform: none;
+                }
             }
         }   
     }
