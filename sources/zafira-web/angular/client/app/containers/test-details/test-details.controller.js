@@ -79,6 +79,7 @@
             changeTestStatus: changeTestStatus,
             showDetailsDialog: showDetailsDialog,
             goToTestDetails: goToTestDetails,
+            openGalleyModal: openGalleyModal,
         };
 
         vm.$onInit = controlInit;
@@ -200,18 +201,7 @@
         function addTest(test) {
             test.elapsed = test.finishTime ? (test.finishTime - test.startTime) : Number.MAX_VALUE;
 
-            test.artifactsToShow = test.artifacts.filter(function (artifact) {
-                var name = artifact.name.toLowerCase();
-
-                return !name.includes('live') && !name.includes('video');
-            });
-            test.artifactsGallery = false;
-            test.artifactsToShow.forEach(function (artifact) {
-                artifact.extension = artifact.link.split('.').pop().split('?')[0];
-                if(artifact.extension === 'png') {
-                    test.artifactsGallery = true;
-                }
-            });
+            prepareArtifacts(test);
             test.tags = test.tags.filter(function (tag) {
                 return tag.name !== 'TESTRAIL_TESTCASE_UUID' && tag.name !== 'QTEST_TESTCASE_UUID';
             });
@@ -227,6 +217,28 @@
 
             onTagSelect(testGroupDataToStore.tags);
             onStatusButtonClick(testGroupDataToStore.statuses);
+        }
+
+        function prepareArtifacts(test) {
+            const formattedArtifacts = test.artifacts.reduce(function(formatted, artifact) {
+                const name = artifact.name.toLowerCase();
+
+                if (!name.includes('live') && !name.includes('video')) {
+                    const pathname = new URL(artifact.link).pathname;
+
+                    artifact.extension = pathname.split('/').pop().split('.').pop();
+                    if (artifact.extension === 'png') {
+                       formatted.imageArtifacts.push(artifact);
+                    } else {
+                        formatted.artifactsToShow.push(artifact);
+                    }
+                }
+
+                return formatted;
+            }, {imageArtifacts: [], artifactsToShow: []});
+
+            test.imageArtifacts = formattedArtifacts.imageArtifacts;
+            test.artifactsToShow = formattedArtifacts.artifactsToShow;
         }
 
         function collectTags(tests) {
@@ -539,6 +551,35 @@
                     vm.zafiraWebsocket.disconnect();
                     UtilService.websocketConnected('zafira');
                 }
+            });
+        }
+
+        function openGalleyModal(event, test) {
+            $mdDialog.show({
+                controller: 'GalleryController',
+                templateUrl: 'app/components/modals/gallery/gallery.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                fullscreen: false,
+                locals: {
+                    url: test.imageArtifacts[0].link,
+                    ciRunId: null,
+                    test: test,
+                    thumbs: test.imageArtifacts.reduce(function(thumbs, artifact, index) {
+                        thumbs[artifact.id] = {
+                            'log': artifact.name,
+                            'thumb': artifact.link,
+                            'index': index,
+                            'path': artifact.link
+                        };
+
+                        return thumbs;
+                    }, {})
+                }
+            })
+            .then(function() {
+            }, function() {
             });
         }
     }
