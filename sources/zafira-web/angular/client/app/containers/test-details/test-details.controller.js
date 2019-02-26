@@ -63,6 +63,7 @@
             testGroups: null,
             testGroupMode: 'PLAIN',
             testRun: testRun,
+            menuExpanded: false,
             // mobileBreakpoint: mediaBreakpoints.mobile || 0,
             // windowWidthService: windowWidthService,
             testsTagsOptions: {},
@@ -92,6 +93,12 @@
             initTests();
             fillTestRunMetadata();
             bindEvents();
+            $scope.$on('$mdMenuOpen', function(event, menu) { 
+                vm.menuExpanded = true;
+            });
+            $scope.$on('$mdMenuClose', function(event, menu) { 
+                vm.menuExpanded = false;
+            });
         }
 
         function fillTestRunMetadata() {

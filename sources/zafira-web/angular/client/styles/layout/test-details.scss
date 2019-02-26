@@ -4,6 +4,14 @@
     .page {
         padding: 0;
     }
+    .unscrollable {
+        position: fixed;
+        right: 0;
+        left: 60px;
+        @media(max-width: $breakpoint-mobile) {
+            left: 0;
+        }
+    }
     .content-container {
         overflow: visible !important;
     }
@@ -279,7 +287,7 @@
                 padding-left: 16px;
             }
         }   
-    }
+    }    
 }
 
 %detailsItems {
